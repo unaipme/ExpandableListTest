@@ -1,13 +1,16 @@
 package com.unaipme.expandablelisttest;
 
+import android.content.Intent;
 import android.graphics.Matrix;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,13 +35,26 @@ public class MainActivity extends ActionBarActivity {
         listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                /*View convertView = ((ExpandableListAdapter)MainActivity.this.listView.getAdapter()).getGroupView(groupPosition);
-                ImageView imageView = (ImageView) convertView.findViewById(R.id.headerImage);
-                Matrix matrix = new Matrix();
-                imageView.setScaleType(ImageView.ScaleType.MATRIX);
-                matrix.postRotate(180f, imageView.getDrawable().getBounds().width()/2, imageView.getDrawable().getBounds().height()/2);
-                imageView.setImageMatrix(matrix);*/
-                Toast.makeText(MainActivity.this, "Hola", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Expanded", Toast.LENGTH_SHORT).show();
+            }
+        });
+        listView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                Toast.makeText(MainActivity.this, "Collapsed", Toast.LENGTH_SHORT).show();
+            }
+        });
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                final String text = ((TextView) v.findViewById(R.id.itemText)).getText().toString();
+                Intent intent = new Intent(MainActivity.this, HelloActivity.class);
+                Bundle b = new Bundle();
+                b.putString("text", text);
+                intent.putExtras(b);
+                startActivity(intent);
+                return false;
             }
         });
     }
